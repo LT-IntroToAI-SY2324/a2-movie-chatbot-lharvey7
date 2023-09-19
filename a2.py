@@ -17,15 +17,58 @@ def match(pattern: List[str], source: List[str]) -> List[str]:
     sind = 0  # current index we are looking at in source list
     pind = 0  # current index we are looking at in pattern list
     result: List[str] = []  # to store substitutions we will return if matched
-
+    z = 0
+    a = ""
     # keep checking as long as we haven't hit the end of either pattern or source while
     # pind is still a valid index OR sind is still a valid index (valid index means that
     # the index is != to the length of the list)
-    while "FILL IN CONDITION HERE":
+    while pind < len(pattern) and sind<len(source):
         # your job is to fill out the body of this loop
+        if pind == len(pattern)-1 and sind < len(source)-1 and pattern[pind] != "%": 
+            return None
+        if sind == len(source) and pattern[pind] != "%":
+            return None
+        if pattern[pind] == source[sind]:
+            pind = pind + 1
+            sind = sind + 1
+        elif pattern[pind] == "_":
+            result.append(source[sind])
+            pind = pind + 1
+            sind = sind + 1
+        elif pattern[pind] == "%":
+            if pind == len(pattern) - 1 :
+                while sind < len(source):
+                    if a == "":
+                        a = source[sind]
+                    else:
+                        a = a + " " + source[sind]
+                    sind = sind + 1
+                b = a
+                result.append(b)
+                return result
+            pind = pind + 1
+            while pattern[pind] != source[sind] :
+                if a == "":
+                    a = source[sind]
+                else:
+                    a = a + " " + source[sind]
+                sind = sind + 1
+                if sind == len(source):
+                    return None
+            b = a
+            a = ""
+            result.append(b)
+            pind = pind + 1
+            sind = sind + 1
+        else:
+            return None
+        
+        
 
-        # you should delete the following line
-        return ["Not done yet :)"]
+            
+            
+        
+            
 
         # 1) if we reached the end of the pattern but not source
 
@@ -44,7 +87,13 @@ def match(pattern: List[str], source: List[str]) -> List[str]:
         # 6) else : this will happen if none of the other conditions are met it
         # indicates the current thing it pattern doesn't match the current thing in
         # source
-
+    if sind != len(source) or pind != len(pattern):
+        if sind < len(source):
+            return None
+        elif pattern[pind] == "%":
+            result.append("")
+        else:
+            return None
     return result
 
 
